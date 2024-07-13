@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- bean definitions here -->
+    <bean id="in28Minutes" class="java.lang.String">
+        <constructor-arg value="In28Minutes"/>
+    </bean>
+
+    <bean id="in28Minutes2" class="java.lang.String">
+        <constructor-arg value="In28Minutes2"/>
+    </bean>
+
+    <context:component-scan base-package="com.in28minutes.learnSpringFramework.game"/>
+
+    <bean id="radixSort" class="com.in28minutes.learnSpringFramework.sortingAlgo.RadixSort">
+    </bean>
+
+    <bean id="bubbleSort" class="com.in28minutes.learnSpringFramework.sortingAlgo.BubbleSort">
+    </bean>
+
+    <bean id="cableManagement" class="com.in28minutes.learnSpringFramework.sortingAlgo.CableManagement">
+        <constructor-arg ref="radixSort"/>
+    </bean>
+
+</beans>

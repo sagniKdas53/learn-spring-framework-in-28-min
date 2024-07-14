@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,14 +15,14 @@
     </div>
 </nav>
 <div class="container-fluid">
-    <div class="col-6">
-    <h1>Hello ${name}</h1>
-
-        Click here to see your password: <button type="button" class="btn btn-primary" onclick="alert('${password}')">Click Me</button>
-        <br>
-        Click this link to see your Todos: <a href="list-todos">Todos</a>
-
-    </div>
+    <%--@elvariable id="todo" type="com.in28minutes.springboot.my_first_web_app.todo.Todo"--%>
+    <form:form action="/add-todo" method="post" modelAttribute="todo">
+        <div class="mb-3">
+            <label for="desc" class="form-label">Description</label>
+            <form:input class="form-control" id="desc" name="desc" path="description" required="required"/>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form:form>
 </div>
 </body>
 </html>

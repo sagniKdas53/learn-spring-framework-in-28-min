@@ -35,12 +35,13 @@ public class LoginController {
     public String showWelcomePage(@RequestParam String name, @RequestParam String password, ModelMap model) {
         model.put("name", name);
         model.put("password", password);
-        if(authService.validate(name, password)) {
-            return "welcome";
+        logger.info("{\"name\":\"{}\", \"password\":\"{}\"}", name, password);
+        if (!authService.validate(name, password)) {
+            getDebug(name, password);
+            model.put("error", "Invalid username or password");
+            return "login";
         }
-        getDebug(name, password);
-        model.put("error", "Invalid username or password");
-        return "login";
+        return "welcome";
     }
 
     @PostMapping(path = "/login-param", consumes = "application/x-www-form-urlencoded")

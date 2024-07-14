@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -42,9 +43,12 @@ public class TodoController {
 
     @PostMapping(path = "add-todo", consumes = "application/x-www-form-urlencoded")
     public String addTodo(ModelMap model, Todo todo) {
-        String desc = todo.getDescription();
-        boolean done = todo.isDone();
-        todoService.addTodo((String) model.get("name"), desc, LocalDateTime.now().plusMonths(1), done, Priority.MEDIUM);
+        log.info("todo: {}", todo);
+        String todoDescription = todo.getDescription();
+        boolean todoDone = todo.isDone();
+        LocalDateTime targetDate = LocalDate.parse("2024-07-21", Todo.getDateTimeFormatter()).atStartOfDay();
+        Priority priority = todo.getPriority();
+        todoService.addTodo((String) model.get("name"), todoDescription, targetDate, todoDone, priority);
         return "redirect:list-todos";
     }
 

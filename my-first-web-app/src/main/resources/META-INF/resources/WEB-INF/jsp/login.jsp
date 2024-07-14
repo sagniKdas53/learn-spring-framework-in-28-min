@@ -14,7 +14,11 @@
     </div>
 </nav>
 <div class="container-fluid">
-${error? "":error}
+    <c:if test="${not empty error}">
+        <div class="alert alert-danger" role="alert">
+                ${error}
+        </div>
+    </c:if>
     <div class="col-6">
 <form action="/login" method="post">
     <div class="mb-3">

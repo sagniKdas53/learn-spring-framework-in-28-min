@@ -15,10 +15,6 @@ public class TodoService {
         todos.add(new Todo(1, "in28minutes", "Learn Spring Boot", LocalDateTime.now().plusMonths(1), false, Priority.HIGH));
         todos.add(new Todo(2, "in28minutes", "Learn Azure 900", LocalDateTime.now().plusMonths(3), false, Priority.MEDIUM));
         todos.add(new Todo(3, "in28minutes", "Learn Kubernetes", LocalDateTime.now().plusMonths(6), false, Priority.LOW));
-//                = List.of(
-//                new Todo(1, "in28minutes", "Learn Spring Boot", LocalDateTime.now().plusMonths(1), false, Priority.HIGH),
-//                new Todo(2, "in28minutes", "Learn Azure 900", LocalDateTime.now().plusMonths(3), false, Priority.HIGH),
-//                new Todo(3, "in28minutes", "Learn Kubernetes", LocalDateTime.now().plusMonths(6), false, Priority.HIGH));
     }
 
     public List<Todo> retrieveTodos(String username) {

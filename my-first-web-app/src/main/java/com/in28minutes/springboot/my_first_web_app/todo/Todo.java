@@ -1,10 +1,12 @@
 package com.in28minutes.springboot.my_first_web_app.todo;
 
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -17,8 +19,12 @@ import java.util.Objects;
 public class Todo {
     private int id;
     private String username;
+    @Size(
+            min = 10,
+            message = "Enter at least 10 characters"
+    )
     private String description;
-    private LocalDateTime targetDate;
+    private Object targetDate;
     private boolean done;
     private Priority priority;
 

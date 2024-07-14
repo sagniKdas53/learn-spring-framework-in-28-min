@@ -41,7 +41,7 @@ public class LoginController {
             model.put("error", "Invalid username or password");
             return "login";
         }
-        return "welcome";
+        return "redirect:/list-todos";
     }
 
     @PostMapping(path = "/login-param", consumes = "application/x-www-form-urlencoded")

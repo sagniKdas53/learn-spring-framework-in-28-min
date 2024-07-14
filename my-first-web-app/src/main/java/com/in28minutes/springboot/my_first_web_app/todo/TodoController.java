@@ -1,9 +1,11 @@
 package com.in28minutes.springboot.my_first_web_app.todo;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +28,7 @@ public class TodoController {
         this.todoService = todoService;
     }
 
-    @RequestMapping("list-todos")
+    @GetMapping("list-todos")
     public String showTodosList(ModelMap model) {
         List<Todo> todos = todoService.retrieveTodos("in28minutes");
         //model.put("name", model.get("name"));
@@ -36,17 +38,21 @@ public class TodoController {
 
     @GetMapping("add-todo")
     public String addTodo(ModelMap model) {
-        model.addAttribute("todo", new Todo(0, (String) model.get("name"), "",
-                LocalDateTime.now().plusMonths(1), false, Priority.LOW));
+        model.addAttribute("todo", new Todo());
         return "addTodo";
     }
 
     @PostMapping(path = "add-todo", consumes = "application/x-www-form-urlencoded")
-    public String addTodo(ModelMap model, Todo todo) {
+    public String addTodo(ModelMap model, @Valid Todo todo, BindingResult result) {
         log.info("todo: {}", todo);
         String todoDescription = todo.getDescription();
         boolean todoDone = todo.isDone();
-        LocalDateTime targetDate = LocalDate.parse("2024-07-21", Todo.getDateTimeFormatter()).atStartOfDay();
+        LocalDateTime targetDate = LocalDate.parse((CharSequence) todo.getTargetDate(), Todo.getDateTimeFormatter()).atStartOfDay();
+        log.info("targetDate: {}", targetDate);
+        if(result.hasErrors()) {
+            model.addAttribute("error", "Invalid Todo Data. Please correct and submit again.");
+            return "addTodo";
+        }
         Priority priority = todo.getPriority();
         todoService.addTodo((String) model.get("name"), todoDescription, targetDate, todoDone, priority);
         return "redirect:list-todos";

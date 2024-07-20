@@ -29,13 +29,14 @@
         </div>
     </c:if>
     <%--@elvariable id="todo" type="com.in28minutes.springboot.my_first_web_app.todo.Todo"--%>
-    <form:form action="/add-todo" method="post" modelAttribute="todo">
+    <form:form action="/update-todo" method="post" modelAttribute="todo">
         <div class="m-1 p-1">
             <form:hidden path="id"/>
             <form:hidden path="username"/>
             <form:label path="description" class="form-label">Task Description</form:label>
             <form:input path="description" class="form-control" id="description" name="description"
                         required="required"/>
+            <form:errors path="description" cssClass="alert alert-danger" element="div"/>
             <form:label path="targetDate" class="form-label">Complete By</form:label>
             <form:input path="targetDate" class="form-control" id="targetDate" name="targetDate" required="required"
                         type="text"/>

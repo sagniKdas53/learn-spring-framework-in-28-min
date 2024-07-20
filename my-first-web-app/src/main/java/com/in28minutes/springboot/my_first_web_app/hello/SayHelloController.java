@@ -27,8 +27,8 @@ public class SayHelloController {
                 """;
     }
 
-    @RequestMapping("say-hello-jsp")
-    public String sayJsp(){
-        return "sayHello";
-    }
+//    @RequestMapping("say-hello-jsp")
+//    public String sayJsp(){
+//        return "sayHello";
+//    }
 }

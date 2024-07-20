@@ -1,5 +1,6 @@
 package com.in28minutes.springboot.my_first_web_app.todo;
 
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +25,8 @@ public class Todo {
             message = "Enter at least 10 characters"
     )
     private String description;
-    private Object targetDate;
+    @FutureOrPresent
+    private LocalDate targetDate;
     private boolean done;
     private Priority priority;
 
@@ -61,7 +63,7 @@ public class Todo {
     public Todo() {
     }
 
-    public Todo(int id, String username, String description, LocalDateTime targetDate, boolean done, Priority priority) {
+    public Todo(int id, String username, String description, LocalDate targetDate, boolean done, Priority priority) {
         this.id = id;
         this.username = username;
         this.description = description;

@@ -3,6 +3,8 @@ package com.in28minutes.springboot.my_first_web_app.todo;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -29,10 +31,14 @@ public class TodoController {
 
     @GetMapping("list-todos")
     public String showTodosList(ModelMap model) {
-        List<Todo> todos = todoService.retrieveTodos("in28minutes");
-        //model.put("name", model.get("name"));
+        List<Todo> todos = todoService.retrieveTodos(getLoggedInUserName());
         model.addAttribute("todos", todos);
         return "listTodos";
+    }
+
+    private static String getLoggedInUserName() {
+        SecurityContext securityContextHolder = SecurityContextHolder.getContext();
+        return securityContextHolder.getAuthentication().getName();
     }
 
     @GetMapping("add-todo")
@@ -46,7 +52,7 @@ public class TodoController {
         String todoDescription = todo.getDescription();
         boolean todoDone = todo.isDone();
         LocalDate targetDate = todo.getTargetDate();
-        String username = (String) model.get("name");
+        String username = getLoggedInUserName();
         if (result.hasErrors()) {
             model.addAttribute("error", "Invalid Todo Data. Please correct and submit again.");
             return "addTodo";

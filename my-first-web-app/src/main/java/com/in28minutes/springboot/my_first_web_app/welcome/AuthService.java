@@ -1,4 +1,4 @@
-package com.in28minutes.springboot.my_first_web_app.login;
+package com.in28minutes.springboot.my_first_web_app.welcome;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;

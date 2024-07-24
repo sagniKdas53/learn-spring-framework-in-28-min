@@ -14,13 +14,14 @@ public class TodoService {
     private static int todosCount = 3;
 
     static {
-        todos.add(new Todo(1, "in28minutes", "Learn Spring Boot", LocalDate.now().plusMonths(1), false, Priority.HIGH));
+        todos.add(new Todo(1, "guactimusprime", "Learn Spring Boot", LocalDate.now().plusMonths(1), false, Priority.HIGH));
         todos.add(new Todo(2, "in28minutes", "Learn Azure 900", LocalDate.now().plusMonths(3), false, Priority.MEDIUM));
-        todos.add(new Todo(3, "in28minutes", "Learn Kubernetes", LocalDate.now().plusMonths(6), false, Priority.LOW));
+        todos.add(new Todo(3, "guactimusprime", "Learn Kubernetes", LocalDate.now().plusMonths(6), false, Priority.LOW));
     }
 
     public List<Todo> retrieveTodos(String username) {
-        return todos;
+        log.info("retrieveTodos - username: {}", username);
+        return todos.stream().filter(todo -> todo.getUsername().equalsIgnoreCase(username)).toList();
     }
 
     public void addTodo(String username, String description, LocalDate targetDate, boolean done, Priority priority) {

@@ -1,5 +1,8 @@
 package com.in28minutes.springboot.my_first_web_app.todo;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -8,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
@@ -17,7 +19,10 @@ import java.util.Objects;
 @Getter
 @Setter
 @Component
+@Entity
 public class Todo {
+    @Id
+    @GeneratedValue
     private int id;
     private String username;
     @Size(
@@ -36,15 +41,13 @@ public class Todo {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Todo{");
-        sb.append("description='").append(description).append('\'');
-        sb.append(", id=").append(id);
-        sb.append(", username='").append(username).append('\'');
-        sb.append(", targetDate=").append(targetDate);
-        sb.append(", done=").append(done);
-        sb.append(", priority=").append(priority);
-        sb.append('}');
-        return sb.toString();
+        return "Todo{" + "description='" + description + '\'' +
+                ", id=" + id +
+                ", username='" + username + '\'' +
+                ", targetDate=" + targetDate +
+                ", done=" + done +
+                ", priority=" + priority +
+                '}';
     }
 
     @Override

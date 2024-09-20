@@ -22,7 +22,7 @@ import java.util.Objects;
 @Entity
 public class Todo {
     @Id
-    @GeneratedValue
+    //@GeneratedValue
     private int id;
     private String username;
     @Size(

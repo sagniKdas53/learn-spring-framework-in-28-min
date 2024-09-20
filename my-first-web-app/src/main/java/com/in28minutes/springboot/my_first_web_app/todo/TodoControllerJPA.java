@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -18,22 +17,24 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
-//@Controller
-@Component
+@Controller
 @SessionAttributes("name")
-public class TodoController {
+public class TodoControllerJPA {
 
     private final TodoService todoService;
 
+    private final TodoRepository todoRepository;
+
     @Autowired
-    public TodoController(TodoService todoService) {
+    public TodoControllerJPA(TodoService todoService, TodoRepository todoRepository) {
         super();
+        this.todoRepository = todoRepository;
         this.todoService = todoService;
     }
 
     @GetMapping("list-todos")
     public String showTodosList(ModelMap model) {
-        List<Todo> todos = todoService.retrieveTodos(getLoggedInUserName());
+        List<Todo> todos = todoRepository.findTodosByUsername(getLoggedInUserName());
         model.addAttribute("todos", todos);
         return "listTodos";
     }
@@ -51,28 +52,27 @@ public class TodoController {
 
     @PostMapping(path = "add-todo", consumes = "application/x-www-form-urlencoded")
     public String addTodo(ModelMap model, @Valid Todo todo, BindingResult result) {
-        String todoDescription = todo.getDescription();
-        boolean todoDone = todo.isDone();
-        LocalDate targetDate = todo.getTargetDate();
-        String username = getLoggedInUserName();
         if (result.hasErrors()) {
             model.addAttribute("error", "Invalid Todo Data. Please correct and submit again.");
             return "addTodo";
         }
-        Priority priority = todo.getPriority();
-        todoService.addTodo(username, todoDescription, targetDate, todoDone, priority);
+        String username = getLoggedInUserName();
+        int todoHighestCount = todoRepository.findFirstByIdNotNullOrderByIdDesc().getId();
+        todo.setId(++todoHighestCount);
+        todo.setUsername(username);
+        todoRepository.save(todo);
         return "redirect:list-todos";
     }
 
     @GetMapping("delete-todo")
     public String deleteTodo(@RequestParam int id) {
-        todoService.deleteTodoById(id);
+        todoRepository.deleteById(id);
         return "redirect:list-todos";
     }
 
     @GetMapping("update-todo")
     public String updateTodoGet(@RequestParam int id, ModelMap model) {
-        Todo todo = todoService.retrieveTodoById(id);
+        Todo todo = todoRepository.findTodoById(id);
         log.debug("updateTodoGet: todo: {}", todo);
         model.addAttribute("id", id);
         model.addAttribute("todo", todo);
@@ -82,18 +82,11 @@ public class TodoController {
     @PostMapping(path = "update-todo", consumes = "application/x-www-form-urlencoded")
     public String updateTodoPost(ModelMap model, @Valid Todo todo, BindingResult result) {
         log.debug("updateTodoPost: todo: {}", todo);
-        int id = todo.getId();
-        String todoDescription = todo.getDescription();
-        String username = todo.getUsername();
-        boolean todoDone = todo.isDone();
-        LocalDate targetDate = todo.getTargetDate();
-        //LocalDate.parse((CharSequence) todo.getTargetDate(), Todo.getDateTimeFormatter()).atStartOfDay();
         if (result.hasErrors()) {
             model.addAttribute("error", "Invalid Todo Data. Please correct and submit again.");
             return "update-todo";
         }
-        Priority priority = todo.getPriority();
-        todoService.updateTodo(id, username, todoDescription, targetDate, todoDone, priority);
+        todoRepository.save(todo);
         return "redirect:list-todos";
     }
 

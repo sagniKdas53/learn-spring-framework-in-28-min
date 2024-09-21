@@ -57,7 +57,12 @@ public class TodoControllerJPA {
             return "addTodo";
         }
         String username = getLoggedInUserName();
-        int todoHighestCount = todoRepository.findFirstByIdNotNullOrderByIdDesc().getId();
+        int todoHighestCount = 0;
+        try {
+            todoHighestCount = todoRepository.findFirstByIdNotNullOrderByIdDesc().getId();
+        }catch (Exception e) {
+            log.debug("addTodo: TodoRepository is empty. Highest id = 0");
+        }
         todo.setId(++todoHighestCount);
         todo.setUsername(username);
         todoRepository.save(todo);

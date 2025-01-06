@@ -2,6 +2,8 @@ package com.in28minutes.rest.webservices.restful_web_services.user;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -27,12 +29,16 @@ public class UserResource {
 
     // GET /users/{id}
     @GetMapping("/users/{id}")
-    public User retrieveUser(@PathVariable int id) throws UserNotFoundException {
+    public EntityModel<User> retrieveUser(@PathVariable int id) throws UserNotFoundException {
         User user = userDaoService.findOne(id);
         if (user == null)
             throw new UserNotFoundException(String.format("ID[%s] not found", id));
 
-        return user;
+        EntityModel<User> entityModel = EntityModel.of(user);
+        WebMvcLinkBuilder link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).retrieveAllUsers());
+        entityModel.add(link.withRel("all-users"));
+
+        return entityModel;
     }
 
     // POST /users
